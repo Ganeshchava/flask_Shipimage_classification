@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ship Image Classifier</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Ship Classification</h1>
+
+        <form method="POST" enctype="multipart/form-data">
+            <!-- Image Upload -->
+            <input type="file" name="image" accept="image/*" required>
+
+            <!-- Model Selection -->
+            <label for="model-select">Select Model:</label>
+            <select name="model" id="model-select" required>
+                <option value="resnet50">ResNet50</option>
+                <option value="vgg16">VGG16</option>
+            </select>
+
+            <!-- Submit Button -->
+            <button type="submit">Classify Image</button>
+        </form>
+
+        <!-- Uploaded Image Preview -->
+        <img id="uploaded-image" src="" alt="Uploaded Ship Image" class="hidden">
+
+        <!-- Prediction Result -->
+        <div id="prediction-result">
+            {% if prediction %}
+                <p class="success">Prediction: {{ prediction }}</p>
+            {% endif %}
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Image preview logic
+        const fileInput = document.querySelector('input[type="file"]');
+        const imagePreview = document.getElementById('uploaded-image');
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    imagePreview.src = reader.result;
+                    imagePreview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
